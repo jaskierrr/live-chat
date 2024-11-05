@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebSocket Echo</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .message-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        #status {
+            padding: 10px;
+            margin: 10px 0;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            margin: 5px 0;
+            width: 80%;
+        }
+        button {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>WebSocket Echo Сервер</h1>
+
+    <div hx-ext="ws" ws-connect="ws://localhost:8080/room">
+        <form ws-send>
+            <input type="text" name="message" placeholder="Введите сообщение">
+            <button type="submit">Отправить</button>
+        </form>
+
+        <div id="messages">
+
+        </div>
+    </div>
+
+    <script>
+        htmx.on('htmx:wsOpen', function (evt) {
+            
+        });
+        htmx.on('htmx:wsAfterMessage', function (evt) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-box';
+            messageDiv.innerHTML = '<strong>Сообщение:</strong> ' + evt.detail.message;
+            document.getElementById('messages').prepend(messageDiv);
+        });
+    </script>
+</body>
+
+</html>
